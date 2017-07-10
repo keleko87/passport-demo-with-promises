@@ -6,6 +6,11 @@ const userSchema = new Schema({
   username: String,
   password: String,
   facebookID: String,
+  role: {
+    type: String,
+    enum : ['GUEST', 'ROOMOWNER'],
+    default : 'GUEST'
+  },
 }, {
   timestamps: { createdAt: "created_at", updatedAt: "updated_at" }
 });

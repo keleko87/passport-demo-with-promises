@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+
+    <% rooms.forEach( room => { %>
+      <li><a href="/room/<%= room._id %>"><%= room.title %></a> - The owner is <%= room.owner.username %></li>
+    <% }); %>
+
+  </body>
+</html>

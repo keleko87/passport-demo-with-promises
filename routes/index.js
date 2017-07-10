@@ -16,25 +16,36 @@ router.get('/', function(req, res, next) {
 });
 
 
-function compruebaLogin(redirectURL){
-  return function(req, res, next){
-      if(req.isAuthenticated()){
-        return next();
-      }else{
-        return res.redirect(redirectURL);
-      }
-  };
-}
-
-//router.use(compruebaLogin('/auth/login'));
-
-//ensureLogin.ensureLoggedIn('/auth/login')
-router.get('/private', (req, res, next) => {
+router.get('/private',ensureLogin.ensureLoggedIn('/auth/login'), (req, res, next) => {
   res.render('private', { title: 'pagina privada'});
 });
 
-//ensureLogin.ensureLoggedIn('/auth/login')
-router.get('/room/:id_room', (req, res, next) => {
+
+router.get('/room', (req, res, next) => {
+  const {id_room} = req.params;
+  Room.find({}).populate('owner').exec().then(rooms => {
+    console.log(rooms);
+    return res.render('rooms', {
+      title: `Rooms`,
+      rooms: rooms
+    });
+  }).catch(e => console.log(e));
+});
+
+
+const checkRoles = (role) => {
+  return function(req, res, next) {
+    if (req.isAuthenticated() && req.user.role === role) {
+      debug("ok, you have access to the room");
+      return next();
+    } else {
+      debug("Warning, non ROOMOWNER trying to access");
+      res.redirect('/auth/login');
+    }
+  };
+};
+
+router.get('/room/:id_room', [checkRoles('ROOMOWNER'), checkRoles('GUEST')], (req, res, next) => {
   const {id_room} = req.params;
   Room.findById(id_room).populate('owner').exec().then(r => {
     console.log(r);

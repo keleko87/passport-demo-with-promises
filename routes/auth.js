@@ -37,7 +37,8 @@ authRoutes.post("/", (req, res, next) => {
 
     const newUser = User({
       username: username,
-      password: hashPass
+      password: hashPass,
+      role:'ROOMOWNER'
     });
 
     newUser.save((err,user) => {

@@ -10,6 +10,8 @@
     <% if(user) { %>
       <p>The user is <%= user.username %></p>
       <p>The FBID is <%= user.facebookID %></p>
+      <p>The ROLE is <b><%= user.role %></b></p>
+      <p><a href="/room">View the rooms</a></p>
 
       <a href="/auth/logout">Logout</a>
     <% }else{ %>
