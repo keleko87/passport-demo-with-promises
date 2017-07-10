@@ -45,7 +45,7 @@ const checkRoles = (role) => {
   };
 };
 
-router.get('/room/:id_room', [checkRoles('ROOMOWNER'), checkRoles('GUEST')], (req, res, next) => {
+router.get('/room/:id_room', checkRoles('ROOMOWNER'), (req, res, next) => {
   const {id_room} = req.params;
   Room.findById(id_room).populate('owner').exec().then(r => {
     console.log(r);
